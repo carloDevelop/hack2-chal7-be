@@ -6,6 +6,6 @@ require('./resources/event/controller');
 require('./resources/account/controller');
 require('./resources/ability/controller');
 
-app.listen(PORT, function () {
+app.listen(process.env.PORT || PORT, function () {
   console.log(`CORS-enabled web server listening on port ${PORT}`)
 });
