@@ -3,6 +3,19 @@ const app = require('../../app');
 const { getContactForUser } = require('../contact/db');
 const { createAccount, getAccount, getRankedEvents, updateAccount } = require('./db');
 
+app.post('/accounts/login', async function (req, res, next) {
+  try {
+    const result = await getAccount(req.body.name);
+    if(result !== null) {
+      res.status(200).json(result);
+    } else {
+      res.sendStatus(401);
+    }
+  } catch(err) {
+    next(err);
+  }
+});
+
 app.post('/accounts', async function (req, res, next) {
   try {
     const result = await createAccount(req.body);

@@ -15,6 +15,24 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:7000/accounts/login HTTP/1.1
+Content-Type: application/json
+
+{"name":"John Doe"}
+
+
+###
+
+POST http://localhost:7000/accounts/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "John Doe The Non-existant"
+}
+
+
+###
+
 PUT http://localhost:7000/accounts/1e18e664-8923-4876-83c3-7942a109f918 HTTP/1.1
 Content-Type: application/json
 

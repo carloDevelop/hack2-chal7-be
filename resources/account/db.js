@@ -56,6 +56,10 @@ const getAccount = async (name) => {
     );
   });
 
+  if(!result) {
+    return null;
+  }
+
   const abilityData = await new Promise((resolve) => {
     db.all(
       `SELECT
