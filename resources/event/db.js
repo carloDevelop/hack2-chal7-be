@@ -25,10 +25,10 @@ const createEvent = async ({ abilities, ...data }) => {
     description: data.description || '',
     location: data.location || '',
     datetime: data.datetime || '',
-    duration: data.duration || 0
+    duration: data.duration || 1
   }
 
-  db.run(`INSERT INTO Event (event_id, name, description, location, datetime, duration) VALUES (?, ?, ?, ?, ?, ?)`, id, data.name, defaultedData.description, defaultedData.location, defaultedData.datetime, defaultedData.duration);
+  db.run(`INSERT INTO Event (event_id, name, account_id, description, location, datetime, duration) VALUES (?, ?, ?, ?, ?, ?, ?)`, id, data.name, data.account_id, defaultedData.description, defaultedData.location, defaultedData.datetime, defaultedData.duration);
   await addAbilitiesToEvent(db, id, abilities);
   db.close();
 

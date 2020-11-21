@@ -127,6 +127,31 @@ Content-Type: application/json
 }
 
 
+
+###
+
+POST http://localhost:7000/events HTTP/1.1
+Content-Type: application/json
+
+{
+  "name":"test",
+  "description":"description",
+  "datetime":"donnerstag",
+  "location":"frankfurt",
+  "account_id":"1e18e664-8923-4876-83c3-7942a109f918",
+  "abilities":[{
+    "ability_id":"fd70d44e-b558-47b3-ae1a-12619b56fe55",
+    "state":1
+  },{
+    "ability_id":"2b8b0281-94f1-4879-8ffd-e76102994674",
+    "state":1
+  },{
+    "ability_id":"2b8b0281-94f1-4879-8ffd-e76102994674",
+    "state":1
+  }]
+}
+
+
 ###
 
 PUT http://localhost:7000/events/938e9486-f0e6-427e-bf44-9838affe97e4 HTTP/1.1
