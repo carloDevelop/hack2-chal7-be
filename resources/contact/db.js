@@ -10,12 +10,12 @@ const getContactForUser = async (account_id) => {
 
 const createContact = async (data) => {
   const db = getDb();
-  const id = uuidv4();
+  const contact_id = uuidv4();
 
-  db.run(`INSERT INTO Contact (contact_id, account_id, contacttype_id, value) VALUES (?, ?, ?, ?)`, id, data.account_id, data.contacttype_id, data.value);
+  db.run(`INSERT INTO Contact (contact_id, account_id, contacttype_id, value) VALUES (?, ?, ?, ?)`, contact_id, data.account_id, data.contacttype_id, data.value);
   db.close();
 
-  return { id, ...data };
+  return { contact_id, ...data };
 }
 
 const updateContact = (id, data) => {

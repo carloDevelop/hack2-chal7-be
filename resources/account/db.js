@@ -7,22 +7,22 @@ const EMAIL_CT = 'a018cc5f-6a32-4187-b774-e6ef260b63c3';
 
 const createAccount = async (userData) => {
   const db = getDb();
-  const id = uuidv4();
+  const account_id = uuidv4();
   let contacts = [];
   const { contacts_mobile, contacts_email, ...data } = userData;
 
-  db.run("INSERT INTO Account (account_id, name, location, organisation) VALUES (?, ?, ?, ?)", id, data.name, data.location, data.organisation);
+  db.run("INSERT INTO Account (account_id, name, location, organisation) VALUES (?, ?, ?, ?)", account_id, data.name, data.location, data.organisation);
 
   if(contacts_mobile) {
-    db.run("INSERT INTO Contact (contact_id, account_id, contacttype_id, value) VALUES (?, ?, ?, ?)", uuidv4(), id, PHONE_CT, contacts_mobile);
+    db.run("INSERT INTO Contact (contact_id, account_id, contacttype_id, value) VALUES (?, ?, ?, ?)", uuidv4(), account_id, PHONE_CT, contacts_mobile);
     contacts.push({ type: 'Telefon', value: data.contacts_mobile });
   };
   if(contacts_email) {
-    db.run("INSERT INTO Account (contact_id, account_id, contacttype_id, value) VALUES (?, ?, ?, ?)", uuidv4(), id, EMAIL_CT, contacts_email);
+    db.run("INSERT INTO Account (contact_id, account_id, contacttype_id, value) VALUES (?, ?, ?, ?)", uuidv4(), account_id, EMAIL_CT, contacts_email);
     contacts.push({ type: 'Email', value: data.contacts_email });
   };
   db.close();
-  return { ...data, id, contacts };
+  return { ...data, account_id, contacts };
 }
 
 
