@@ -12,21 +12,27 @@ const initalize = () => {
     db.run(`CREATE TABLE Account (
       account_id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
+      location TEXT NOT NULL,
+      organisation TEXT NOT NULL,
       time NUMBER DEFAULT 0
     )`);
     const accountJohn = {
       id: 'a0b76ef3-9019-4871-95c7-d69ded0a2c72',
       name: 'John Doe',
-      time: 9
+      time: 9,
+      location: 'Frankfurt',
+      organisation: 'Handy Gmbh'
     };
     const accountJane = {
       id: '1e18e664-8923-4876-83c3-7942a109f918',
       name: 'Jane Doe',
-      time: 42
+      time: 42,
+      location: 'Berlin',
+      organisation: 'TestOrg Gmbh'
     };
     console.info('adding data...');
-    db.run(`INSERT INTO Account (account_id, name, time) VALUES ('${accountJohn.id}', '${accountJohn.name}', ${accountJohn.time})`);
-    db.run(`INSERT INTO Account (account_id, name, time) VALUES ('${accountJane.id}', '${accountJane.name}', ${accountJane.time})`);
+    db.run(`INSERT INTO Account (account_id, name, time, location, organisation) VALUES ('${accountJohn.id}', '${accountJohn.name}', ${accountJohn.time}, '${accountJohn.location}', '${accountJohn.organisation}')`);
+    db.run(`INSERT INTO Account (account_id, name, time, location, organisation) VALUES ('${accountJane.id}', '${accountJane.name}', ${accountJane.time}, '${accountJane.location}', '${accountJane.organisation}')`);
 
     console.info('recreating table ContactType');
     db.run('DROP TABLE IF EXISTS ContactType');

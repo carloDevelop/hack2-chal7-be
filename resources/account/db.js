@@ -7,7 +7,7 @@ const createAccount = async (data) => {
   const db = getDb();
   const id = uuidv4();
 
-  db.run("INSERT INTO Account (account_id, name) VALUES (?, ?)", id, data.name);
+  db.run("INSERT INTO Account (account_id, name, location, organisation) VALUES (?, ?)", id, data.name, data.location, data.organisation);
   db.close();
   return { id, ...data };
 }
@@ -86,7 +86,18 @@ const getAccount = async (name) => {
 const updateAccount = async (id, data) => {
     const db = getDb();
 
-    db.run("UPDATE Account SET name = ?, time = ? WHERE account_id = ?", data.name, data.time, id);
+    if(data.name) {
+      db.run("UPDATE Account SET name = ? WHERE account_id = ?", data.name, id);
+    }
+    if(data.time) {
+      db.run("UPDATE Account SET time = ? WHERE account_id = ?", data.name, id);
+    }
+    if(data.location) {
+      db.run("UPDATE Account SET location = ? WHERE account_id = ?", data.location, id);
+    }
+    if(data.location) {
+      db.run("UPDATE Account SET organisation = ? WHERE account_id = ?", data.organisation, id);
+    }
 
     db.serialize(function() {
       if(Array.isArray(data.abilities)) {
