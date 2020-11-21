@@ -64,7 +64,7 @@ const getSingleEvent = async (id) => {
 
   let result = await new Promise((resolve) => {
     db.get(
-      `SELECT event_id, name, description, location, datetime, duration FROM Event WHERE event_id = '${id}'`,
+      `SELECT event_id, name, account_id, description, location, datetime, duration FROM Event WHERE event_id = '${id}'`,
       function(err, row) {
         resolve(row);
       }

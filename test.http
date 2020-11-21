@@ -1,6 +1,6 @@
 # send this to get complete dataset that will be returned in account
-GET http://localhost:7000/accounts/John%20Doe HTTP/1.1
 
+GET http://localhost:7000/accounts/a0b76ef3-9019-4871-95c7-d69ded0a2c72 HTTP/1.1
 ###
 
 POST http://localhost:7000/accounts HTTP/1.1

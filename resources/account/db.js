@@ -57,12 +57,19 @@ const getRankedEvents = async (id) => {
   return result;
 }
 
-const getAccount = async (name) => {
+const getAccount = async ({ id, name }) => {
   const db = getDb();
+
+  if(!id && !name) {
+    return null;
+  }
+
+  let str = name ? `name = '${name}'` : '';
+  str = id ? `account_id = '${id}'` : str;
 
   let result = await new Promise((resolve) => {
     db.get(
-      `SELECT account_id, name, time FROM Account WHERE name = '${name}'`,
+      `SELECT account_id, name, time FROM Account WHERE ${str}`,
       function(err, row) {
         resolve(row);
       }

@@ -5,7 +5,7 @@ const { createAccount, getAccount, getRankedEvents, updateAccount } = require('.
 
 app.post('/accounts/login', async function (req, res, next) {
   try {
-    const result = await getAccount(req.body.name);
+    const result = await getAccount({ name: req.body.name });
     if(result !== null) {
       res.status(200).json(result);
     } else {
@@ -27,7 +27,7 @@ app.post('/accounts', async function (req, res, next) {
 
 app.get('/accounts/:id', async function (req, res, next) {
   try {
-    const result = await getAccount(req.params.id);
+    const result = await getAccount({ id: req.params.id });
     res.status(200).json(result);
   } catch(err) {
     next(err);
