@@ -1,16 +1,15 @@
 const { getDb } = require("../../utils/dbHandler");
+const { getContactDataForUser } = require('../../utils/dbCommons');
 const { v4: uuidv4 } = require('uuid');
 
 
-const createAccount = (name) => {
+const createAccount = async (data) => {
   const db = getDb();
+  const id = uuidv4();
 
-  return new Promise((resolve) => {
-    const id = uuidv4();
-    db.run("INSERT INTO Account (account_id, name) VALUES (?, ?)", id, name);
-    db.close();
-    resolve({ id, name });
-  });
+  db.run("INSERT INTO Account (account_id, name) VALUES (?, ?)", id, data.name);
+  db.close();
+  return { id, ...data };
 }
 
 
@@ -54,7 +53,7 @@ const getAccount = async (name) => {
   });
   result.registrations = [...registrationData];
 
-  registrationData.forEach(async (d) => {
+  await Promise.all(registrationData.map(async (d) => {
     const registeredAbilities = await new Promise((resolve) => {
       const sqlStr = `SELECT
         AbilityEvent.abilityevent_id, AbilityEvent.ability_id
@@ -73,21 +72,9 @@ const getAccount = async (name) => {
     if(registrationIndex !== -1) {
       result.registrations[registrationIndex].abilities = registeredAbilities;
     }
-  });
+  }));
 
-  const contactData = await new Promise((resolve) => {
-    const sqlStr = `SELECT
-      Contact.contact_id, Contact.value as contact, ContactType.value as type
-    FROM Contact
-    JOIN ContactType ON Contact.contacttype_id = ContactType.contacttype_id
-    WHERE Contact.account_id = '${result.account_id}'`;
-    db.all(
-      sqlStr,
-      function(err, rows) {
-        resolve(rows);
-      }
-    );
-  });
+  const contactData = await getContactDataForUser(db, result.account_id);
   result.contacts = [...contactData];
 
   db.close();
@@ -101,17 +88,19 @@ const updateAccount = async (id, data) => {
 
     db.run("UPDATE Account SET name = ?, time = ? WHERE account_id = ?", data.name, data.time, id);
 
-    if(Array.isArray(data.abilities)) {
-      db.run("DELETE FROM AbilityAccount WHERE account_id = ?", id);
-      const stmt = db.prepare("INSERT INTO AbilityAccount (abilityaccount_id, ability_id, account_id) VALUES (?, ?, ?)", )
-      data.abilities.forEach(abilityId => {
-        stmt.run(uuidv4(), abilityId, id);
-      });
-      stmt.finalize();
-    }
+    db.serialize(function() {
+      if(Array.isArray(data.abilities)) {
+        db.run("DELETE FROM AbilityAccount WHERE account_id = ?", id);
+        const stmt = db.prepare("INSERT INTO AbilityAccount (abilityaccount_id, ability_id, account_id) VALUES (?, ?, ?)", )
+        data.abilities.forEach(ability_id => {
+          stmt.run(uuidv4(), ability_id, id);
+        });
+        stmt.finalize();
+      }
+    });
     db.close();
 
-    return true;
+    return {};
 }
 
 

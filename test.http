@@ -13,7 +13,7 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:7000/accounts/<account_id> HTTP/1.1
+PUT http://localhost:7000/accounts/1e18e664-8923-4876-83c3-7942a109f918 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -23,7 +23,7 @@ Content-Type: application/json
 ###
 
 
-PUT http://localhost:7000/accounts/<account_id> HTTP/1.1
+PUT http://localhost:7000/accounts/1e18e664-8923-4876-83c3-7942a109f918 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -33,7 +33,7 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:7000/accounts/<account_id> HTTP/1.1
+PUT http://localhost:7000/accounts/1e18e664-8923-4876-83c3-7942a109f918 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -73,3 +73,79 @@ Content-Type: application/json
 ###
 
 GET http://localhost:7000/abilities HTTP/1.1
+
+###
+
+GET http://localhost:7000/accounts/1e18e664-8923-4876-83c3-7942a109f918/contacts HTTP/1.1
+
+
+###
+
+POST http://localhost:7000/contacts HTTP/1.1
+Content-Type: application/json
+
+{
+  "contacttype_id": "1c37c33e-39a3-4504-87e8-53b0fa90450a",
+  "account_id": "1e18e664-8923-4876-83c3-7942a109f918",
+  "value": "+49 333 333 333"
+}
+
+###
+
+GET http://localhost:7000/events HTTP/1.1
+
+
+###
+
+GET http://localhost:7000/events/938e9486-f0e6-427e-bf44-9838affe97e4 HTTP/1.1
+
+
+
+###
+
+POST http://localhost:7000/events HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "my cool event",
+  "location": "on internet",
+  "datetime": "26-11-2020",
+  "abilities": [{
+    "ability_id": "fd70d44e-b558-47b3-ae1a-12619b56fe55",
+    "state": 0
+  }, {
+    "ability_id": "2b8b0281-94f1-4879-8ffd-e76102994674",
+    "state": 1
+  }]
+}
+
+
+###
+
+PUT http://localhost:7000/events/938e9486-f0e6-427e-bf44-9838affe97e4 HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "my cool event",
+  "location": "on internet",
+  "datetime": "26-11-2020",
+  "abilities": [{
+    "ability_id": "fd70d44e-b558-47b3-ae1a-12619b56fe55",
+    "state": 0
+  }, {
+    "ability_id": "2b8b0281-94f1-4879-8ffd-e76102994674",
+    "state": 1
+  }]
+}
+
+
+###
+
+POST http://localhost:7000/registrations HTTP/1.1
+Content-Type: application/json
+
+{
+  "event_id": "938e9486-f0e6-427e-bf44-9838affe97e4",
+  "account_id": "1e18e664-8923-4876-83c3-7942a109f918",
+  "event_abilities": ["581d12cf-68f9-4d30-a0f8-6ad71ac9ed14", "5581118f-9b29-4390-8a06-22331cd952ba"]
+}
