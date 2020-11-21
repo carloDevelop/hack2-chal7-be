@@ -8,7 +8,7 @@ const createRegistration = async (data) => {
   const { event_abilities, ...evdata } = data;
   let abilitiesRegistrations = [];
 
-  db.run("INSERT INTO Registration (registration_id, event_id, account_id) VALUES (?, ?, ?)", id, evdata.event_id, evdata.account_id);
+  db.run("INSERT INTO Registration (registration_id, event_id, account_id) VALUES (?, ?, ?)", registration_id, evdata.event_id, evdata.account_id);
 
   event_abilities.forEach(abilityevent_id => {
     const abilityregistration_id = uuidv4();
