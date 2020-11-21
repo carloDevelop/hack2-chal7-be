@@ -1,20 +1,6 @@
 const { getDb } = require("../../utils/dbHandler");
 const { v4: uuidv4 } = require('uuid');
-
-
-const getAbilityData = (db, id) => {
-  return new Promise((resolve) => {
-    db.all(
-      `SELECT
-      AbilityEvent.ability_id, AbilityEvent.state
-      FROM AbilityEvent
-      WHERE AbilityEvent.event_id = '${id}'`,
-      function(err, rows) {
-        resolve(rows);
-      }
-    );
-  });
-}
+const { getAbilityEventData } = require('../../utils/dbCommons');
 
 
 const addAbilitiesToEvent = async (db, id, abilities=null) => {
@@ -49,12 +35,13 @@ const createEvent = async ({ abilities, ...data }) => {
   return { id, ...data };
 }
 
+
 const getAllEvents = async () => {
   const db = getDb();
 
   let result = await new Promise((resolve) => {
     db.all(
-      `SELECT event_id, name, description, location, datetime, duration FROM Event`,
+      `SELECT event_id, name, account_id, description, location, datetime, duration FROM Event`,
       function(err, rows) {
         resolve(rows);
       }
@@ -62,8 +49,10 @@ const getAllEvents = async () => {
   });
 
   await Promise.all(result.map(async (r, i) => {
-    const abilityData = await getAbilityData(db, r.event_id);
-    result[i].abilities = abilityData;
+    const abilityData = await getAbilityEventData(db, r.event_id);
+    if(abilityData) {
+      result[i].abilities = abilityData;
+    }
   }));
 
   db.close();
@@ -80,10 +69,16 @@ const getSingleEvent = async (id) => {
         resolve(row);
       }
     );
-  });
+  }) || null;
 
-  const abilityData = await getAbilityData(db, result.event_id);
-  result.abilities = abilityData;
+  if(result === null) {
+    return {};
+  }
+
+  const abilityData = await getAbilityEventData(db, result.event_id);
+  if(abilityData) {
+    result.abilities = abilityData;
+  }
 
   db.close();
   return result;

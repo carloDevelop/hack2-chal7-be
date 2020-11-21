@@ -87,6 +87,7 @@ const initalize = () => {
     db.run('DROP TABLE IF EXISTS Event');
     db.run(`CREATE TABLE Event (
       event_id TEXT PRIMARY KEY,
+      account_id TEXT NOT NULL,
       name TEXT NOT NULL,
       description TEXT,
       location TEXT NOT NULL,
@@ -110,8 +111,8 @@ const initalize = () => {
       duration: 1.5
     };
     console.info('adding data...');
-    db.run(`INSERT INTO Event (event_id, name, description, location, datetime, duration) VALUES ('${eventCatering.id}', '${eventCatering.name}', '${eventCatering.description}', '${eventCatering.location}', '${eventCatering.datetime}', '${eventCatering.duration}')`);
-    db.run(`INSERT INTO Event (event_id, name, description, location, datetime, duration) VALUES ('${eventH2Hcombat.id}', '${eventH2Hcombat.name}', '${eventH2Hcombat.description}', '${eventH2Hcombat.location}', '${eventH2Hcombat.datetime}', ${eventH2Hcombat.duration})`);
+    db.run(`INSERT INTO Event (event_id, account_id, name, description, location, datetime, duration) VALUES ('${eventCatering.id}', '${accountJohn.id}', '${eventCatering.name}', '${eventCatering.description}', '${eventCatering.location}', '${eventCatering.datetime}', '${eventCatering.duration}')`);
+    db.run(`INSERT INTO Event (event_id, account_id, name, description, location, datetime, duration) VALUES ('${eventH2Hcombat.id}', '${accountJohn.id}', '${eventH2Hcombat.name}', '${eventH2Hcombat.description}', '${eventH2Hcombat.location}', '${eventH2Hcombat.datetime}', ${eventH2Hcombat.duration})`);
 
     console.info('recreating table Ability');
     db.run('DROP TABLE IF EXISTS Ability');
@@ -183,9 +184,15 @@ const initalize = () => {
       event_id: eventH2Hcombat.id,
       ability_id: abilityH2H.id
     };
+    const abilitiesEventCatering2 = {
+      id: '5313f288-f2d8-4c76-9b04-6af11355b818',
+      event_id: eventH2Hcombat.id,
+      ability_id: abilityH2H.id,
+    };
     console.info('adding data...');
     db.run(`INSERT INTO AbilityEvent (abilityevent_id, event_id, ability_id) VALUES ('${abilitiesEventCatering.id}', '${abilitiesEventCatering.event_id}', '${abilitiesEventCatering.ability_id}')`);
     db.run(`INSERT INTO AbilityEvent (abilityevent_id, event_id, ability_id) VALUES ('${abilitiesEventH2H.id}', '${abilitiesEventH2H.event_id}', '${abilitiesEventH2H.ability_id}')`);
+    db.run(`INSERT INTO AbilityEvent (abilityevent_id, event_id, ability_id) VALUES ('${abilitiesEventCatering2.id}', '${abilitiesEventCatering2.event_id}', '${abilitiesEventCatering2.ability_id}')`);
 
     console.info('recreating table Registration');
     db.run('DROP TABLE IF EXISTS Registration');

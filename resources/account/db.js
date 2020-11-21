@@ -1,5 +1,5 @@
 const { getDb } = require("../../utils/dbHandler");
-const { getContactDataForUser } = require('../../utils/dbCommons');
+const { getContactDataForUser, getAbilityEventData } = require('../../utils/dbCommons');
 const { v4: uuidv4 } = require('uuid');
 
 
@@ -12,6 +12,37 @@ const createAccount = async (data) => {
   return { id, ...data };
 }
 
+
+const getRankedEvents = async (id) => {
+  const db = getDb();
+  const sqlStr = `select
+    event_id,
+    name,
+    description,
+    location,
+    datetime,
+    duration,
+    account_id,
+    (select count(1) from AbilityEvent where AbilityEvent.event_id = Event.event_id and exists (select 1 from AbilityAccount where AbilityAccount.ability_id = AbilityEvent.ability_id and AbilityAccount.account_id = '${id}')) rank
+  from Event
+  order by rank desc`;
+  let result = await new Promise((resolve) => {
+    db.all(
+      sqlStr,
+      function(err, rows) {
+        resolve(rows);
+      }
+    );
+  });
+
+  await Promise.all(result.map(async (r, i) => {
+    const abilityData = await getAbilityEventData(db, r.event_id);
+    result[i].abilities = abilityData;
+  }));
+
+  db.close();
+  return result;
+}
 
 const getAccount = async (name) => {
   const db = getDb();
@@ -118,5 +149,6 @@ const updateAccount = async (id, data) => {
 module.exports = {
   createAccount,
   getAccount,
+  getRankedEvents,
   updateAccount
 }
